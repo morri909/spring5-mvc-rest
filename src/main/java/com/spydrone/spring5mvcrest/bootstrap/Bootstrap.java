@@ -1,16 +1,21 @@
 package com.spydrone.spring5mvcrest.bootstrap;
 
 import com.spydrone.spring5mvcrest.domain.Category;
+import com.spydrone.spring5mvcrest.domain.Customer;
 import com.spydrone.spring5mvcrest.repositories.CategoryRepository;
+import com.spydrone.spring5mvcrest.repositories.CustomerRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 
 @Component
 public class Bootstrap implements CommandLineRunner {
-	private CategoryRepository categoryRepository;
 
-	public Bootstrap(CategoryRepository categoryRepository) {
+	private final CategoryRepository categoryRepository;
+	private final CustomerRepository customerRepository;
+
+	public Bootstrap(CategoryRepository categoryRepository, CustomerRepository customerRepository) {
 		this.categoryRepository = categoryRepository;
+		this.customerRepository = customerRepository;
 	}
 
 	@Override
@@ -31,5 +36,20 @@ public class Bootstrap implements CommandLineRunner {
 		fruit.setName("fruit");
 		categoryRepository.save(fruit);
 		System.out.println("Number of categories: " + categoryRepository.findAll().size());
+
+		Customer customer1 = new Customer();
+		customer1.setFirstName("Jordan");
+		customer1.setLastName("Spieth");
+		customerRepository.save(customer1);
+		Customer customer2 = new Customer();
+		customer2.setFirstName("Rory");
+		customer2.setLastName("McIlroy");
+		customerRepository.save(customer2);
+		Customer customer3 = new Customer();
+		customer3.setFirstName("Justin");
+		customer3.setLastName("Thomas");
+		customerRepository.save(customer3);
+
+		System.out.println("Number of customers: " + customerRepository.findAll().size());
 	}
 }
