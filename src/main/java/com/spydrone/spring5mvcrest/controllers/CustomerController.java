@@ -6,9 +6,7 @@ import com.spydrone.spring5mvcrest.services.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 
@@ -24,11 +22,16 @@ public class CustomerController {
 
 	@GetMapping
 	public ResponseEntity<CustomerListDTO> getAll() {
-		return new ResponseEntity<CustomerListDTO>(new CustomerListDTO(customerService.getAll()), HttpStatus.OK);
+		return new ResponseEntity<>(new CustomerListDTO(customerService.getAll()), HttpStatus.OK);
 	}
 
 	@GetMapping("{id}")
 	public ResponseEntity<CustomerDTO> getById(@PathVariable  Long id) {
-		return new ResponseEntity<CustomerDTO>(customerService.getById(id).orElseThrow(EntityNotFoundException::new), HttpStatus.OK);
+		return new ResponseEntity<>(customerService.getById(id).orElseThrow(EntityNotFoundException::new), HttpStatus.OK);
+	}
+
+	@PostMapping
+	public ResponseEntity<CustomerDTO> save(@RequestBody CustomerDTO customerDTO) {
+		return new ResponseEntity<>(customerService.save(customerDTO), HttpStatus.CREATED);
 	}
 }

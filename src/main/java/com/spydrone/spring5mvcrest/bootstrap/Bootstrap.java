@@ -20,6 +20,28 @@ public class Bootstrap implements CommandLineRunner {
 
 	@Override
 	public void run(String... args) throws Exception {
+		loadCategories();
+		loadCustomers();
+	}
+
+	private void loadCustomers() {
+		Customer customer1 = new Customer();
+		customer1.setFirstName("Jordan");
+		customer1.setLastName("Spieth");
+		customerRepository.save(customer1);
+		Customer customer2 = new Customer();
+		customer2.setFirstName("Rory");
+		customer2.setLastName("McIlroy");
+		customerRepository.save(customer2);
+		Customer customer3 = new Customer();
+		customer3.setFirstName("Justin");
+		customer3.setLastName("Thomas");
+		customerRepository.save(customer3);
+
+		System.out.println("Number of customers: " + customerRepository.findAll().size());
+	}
+
+	private void loadCategories() {
 		Category grain = new Category();
 		grain.setName("grain");
 		categoryRepository.save(grain);
@@ -36,20 +58,5 @@ public class Bootstrap implements CommandLineRunner {
 		fruit.setName("fruit");
 		categoryRepository.save(fruit);
 		System.out.println("Number of categories: " + categoryRepository.findAll().size());
-
-		Customer customer1 = new Customer();
-		customer1.setFirstName("Jordan");
-		customer1.setLastName("Spieth");
-		customerRepository.save(customer1);
-		Customer customer2 = new Customer();
-		customer2.setFirstName("Rory");
-		customer2.setLastName("McIlroy");
-		customerRepository.save(customer2);
-		Customer customer3 = new Customer();
-		customer3.setFirstName("Justin");
-		customer3.setLastName("Thomas");
-		customerRepository.save(customer3);
-
-		System.out.println("Number of customers: " + customerRepository.findAll().size());
 	}
 }

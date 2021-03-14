@@ -53,5 +53,22 @@ class CustomerServiceTest {
 		CustomerDTO result = resultOptional.get();
 		Assertions.assertEquals(customer.getFirstName(), result.getFirstName());
 		Assertions.assertEquals(customer.getLastName(), result.getLastName());
+		Assertions.assertEquals("/api/v1/customers/" + customer.getId().toString(), result.getCustomerUrl());
+	}
+
+	@Test
+	public void save() {
+		Customer customer = new Customer();
+		customer.setFirstName("test");
+		customer.setLastName("this is a test");
+
+		Mockito.when(customerRepository.save(Mockito.any())).thenReturn(customer);
+
+		CustomerDTO result = sut.save(new CustomerDTO());
+
+		Assertions.assertNotNull(result);
+		Assertions.assertEquals(customer.getFirstName(), result.getFirstName());
+		Assertions.assertEquals(customer.getLastName(), result.getLastName());
+		Mockito.verify(customerRepository).save(Mockito.any());
 	}
 }
