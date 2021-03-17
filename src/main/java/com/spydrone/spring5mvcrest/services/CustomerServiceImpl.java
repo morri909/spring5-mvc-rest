@@ -66,5 +66,10 @@ public class CustomerServiceImpl implements CustomerService {
 				.orElse(new CustomerDTO());
 	}
 
+	@Override
+	public void deleteById(Long id) {
+		customerRepository.deleteById(id);
+	}
+
 
 }

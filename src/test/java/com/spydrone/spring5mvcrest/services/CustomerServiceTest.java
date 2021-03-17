@@ -71,4 +71,10 @@ class CustomerServiceTest {
 		Assertions.assertEquals(customer.getLastName(), result.getLastName());
 		Mockito.verify(customerRepository).save(Mockito.any());
 	}
+
+	@Test
+	public void delete() {
+		sut.deleteById(1L);
+		Mockito.verify(customerRepository).deleteById(Mockito.anyLong());
+	}
 }

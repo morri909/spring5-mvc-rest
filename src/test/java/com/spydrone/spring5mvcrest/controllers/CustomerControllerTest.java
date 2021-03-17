@@ -116,4 +116,11 @@ class CustomerControllerTest extends AbstractRestControllerTest {
 				.andExpect(jsonPath("$.firstName", Matchers.equalTo(customerDTO.getFirstName())))
 				.andExpect(jsonPath("$.lastName", Matchers.equalTo(customerDTO.getLastName())));
 	}
+
+	@Test
+	public void deleteTest() throws Exception {
+		mockMvc.perform(delete("/api/v1/customers/1"))
+				.andExpect(status().isOk());
+		Mockito.verify(customerService).deleteById(Mockito.anyLong());
+	}
 }
