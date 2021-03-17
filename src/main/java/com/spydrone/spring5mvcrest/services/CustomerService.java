@@ -9,4 +9,5 @@ public interface CustomerService {
 	List<CustomerDTO> getAll();
 	Optional<CustomerDTO> getById(Long id);
 	CustomerDTO save(CustomerDTO customerDTO);
+	CustomerDTO patch(CustomerDTO customerDTO);
 }

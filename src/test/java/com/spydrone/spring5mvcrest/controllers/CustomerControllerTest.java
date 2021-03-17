@@ -99,4 +99,21 @@ class CustomerControllerTest extends AbstractRestControllerTest {
 				.andExpect(jsonPath("$.firstName", Matchers.equalTo(customerDTO.getFirstName())))
 				.andExpect(jsonPath("$.lastName", Matchers.equalTo(customerDTO.getLastName())));
 	}
+
+	@Test
+	public void patchTest() throws Exception {
+		CustomerDTO customerDTO = new CustomerDTO();
+		customerDTO.setId(1L);
+		customerDTO.setFirstName("Justin");
+		customerDTO.setLastName("Thomas");
+		Mockito.when(customerService.patch(Mockito.any())).thenReturn(customerDTO);
+
+		mockMvc.perform(patch("/api/v1/customers/" + customerDTO.getId())
+					.contentType(MediaType.APPLICATION_JSON_VALUE)
+					.content(asJsonString(customerDTO)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.id", Matchers.equalTo(customerDTO.getId().intValue())))
+				.andExpect(jsonPath("$.firstName", Matchers.equalTo(customerDTO.getFirstName())))
+				.andExpect(jsonPath("$.lastName", Matchers.equalTo(customerDTO.getLastName())));
+	}
 }
