@@ -18,8 +18,7 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.Arrays;
 import java.util.Optional;
 
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -70,7 +69,7 @@ class CustomerControllerTest extends AbstractRestControllerTest {
 	}
 
 	@Test
-	public void save() throws Exception {
+	public void create() throws Exception {
 		CustomerDTO customerDTO = new CustomerDTO();
 		customerDTO.setFirstName("Justin");
 		customerDTO.setLastName("Thomas");
@@ -80,6 +79,23 @@ class CustomerControllerTest extends AbstractRestControllerTest {
 					.contentType(MediaType.APPLICATION_JSON_VALUE)
 					.content(asJsonString(customerDTO)))
 				.andExpect(status().isCreated())
+				.andExpect(jsonPath("$.firstName", Matchers.equalTo(customerDTO.getFirstName())))
+				.andExpect(jsonPath("$.lastName", Matchers.equalTo(customerDTO.getLastName())));
+	}
+
+	@Test
+	public void update() throws Exception {
+		CustomerDTO customerDTO = new CustomerDTO();
+		customerDTO.setId(1L);
+		customerDTO.setFirstName("Justin");
+		customerDTO.setLastName("Thomas");
+		Mockito.when(customerService.save(Mockito.any())).thenReturn(customerDTO);
+
+		mockMvc.perform(put("/api/v1/customers/" + customerDTO.getId())
+					.contentType(MediaType.APPLICATION_JSON_VALUE)
+					.content(asJsonString(customerDTO)))
+				.andExpect(status().isOk())
+				.andExpect(jsonPath("$.id", Matchers.equalTo(customerDTO.getId().intValue())))
 				.andExpect(jsonPath("$.firstName", Matchers.equalTo(customerDTO.getFirstName())))
 				.andExpect(jsonPath("$.lastName", Matchers.equalTo(customerDTO.getLastName())));
 	}
