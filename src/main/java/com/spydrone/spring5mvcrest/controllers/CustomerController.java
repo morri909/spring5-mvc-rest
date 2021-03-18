@@ -5,12 +5,11 @@ import com.spydrone.spring5mvcrest.model.CustomerListDTO;
 import com.spydrone.spring5mvcrest.services.CustomerService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 
-@Controller
+@RestController
 @RequestMapping("/api/v1/customers")
 public class CustomerController {
 
