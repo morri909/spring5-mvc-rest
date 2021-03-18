@@ -4,11 +4,7 @@ import com.spydrone.spring5mvcrest.model.CategoryDTO;
 import com.spydrone.spring5mvcrest.model.CategoryListDTO;
 import com.spydrone.spring5mvcrest.services.CategoryService;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/api/v1/categories")
@@ -21,12 +17,14 @@ public class CategoryController {
 	}
 
 	@GetMapping
-	public ResponseEntity<CategoryListDTO> getAll() {
-		return new ResponseEntity<CategoryListDTO>(new CategoryListDTO(categoryService.getAll()), HttpStatus.OK);
+	@ResponseStatus(HttpStatus.OK)
+	public CategoryListDTO getAll() {
+		return new CategoryListDTO(categoryService.getAll());
 	}
 
 	@GetMapping("{name}")
-	public ResponseEntity<CategoryDTO> getByName(@PathVariable String name) {
-		return new ResponseEntity<CategoryDTO>(categoryService.getByName(name), HttpStatus.OK);
+	@ResponseStatus(HttpStatus.OK)
+	public CategoryDTO getByName(@PathVariable String name) {
+		return categoryService.getByName(name);
 	}
 }
