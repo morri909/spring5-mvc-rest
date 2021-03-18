@@ -14,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Arrays;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
@@ -33,7 +34,9 @@ class CategoryControllerTest {
 
 	@BeforeEach
 	void setUp() {
-		mockMvc = MockMvcBuilders.standaloneSetup(categoryController).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(categoryController)
+				.setControllerAdvice(new RestExceptionHandler())
+				.build();
 	}
 
 	@Test
@@ -63,5 +66,14 @@ class CategoryControllerTest {
 				.contentType(MediaType.APPLICATION_JSON_VALUE))
 				.andExpect(status().isOk())
 				.andExpect(jsonPath("$.name", Matchers.equalTo(categoryDTO.getName())));
+	}
+
+	@Test
+	public void getCategoryNotFound() throws Exception {
+		Mockito.when(categoryService.getByName(Mockito.anyString())).thenThrow(EntityNotFoundException.class);
+
+		mockMvc.perform(get("/api/v1/categories/1")
+				.contentType(MediaType.APPLICATION_JSON_VALUE))
+				.andExpect(status().isNotFound());
 	}
 }

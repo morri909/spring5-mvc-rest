@@ -1,6 +1,5 @@
 package com.spydrone.spring5mvcrest.controllers;
 
-import com.spydrone.spring5mvcrest.domain.Customer;
 import com.spydrone.spring5mvcrest.model.CustomerDTO;
 import com.spydrone.spring5mvcrest.services.CustomerService;
 import org.hamcrest.Matchers;
@@ -15,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.Arrays;
 import java.util.Optional;
 
@@ -35,7 +35,9 @@ class CustomerControllerTest extends AbstractRestControllerTest {
 
 	@BeforeEach
 	void setUp() {
-		mockMvc = MockMvcBuilders.standaloneSetup(customerController).build();
+		mockMvc = MockMvcBuilders.standaloneSetup(customerController)
+				.setControllerAdvice(new RestExceptionHandler())
+				.build();
 	}
 
 	@Test
@@ -122,5 +124,14 @@ class CustomerControllerTest extends AbstractRestControllerTest {
 		mockMvc.perform(delete("/api/v1/customers/1"))
 				.andExpect(status().isOk());
 		Mockito.verify(customerService).deleteById(Mockito.anyLong());
+	}
+
+	@Test
+	public void getCustomerNotFound() throws Exception {
+		Mockito.when(customerService.getById(Mockito.anyLong())).thenThrow(EntityNotFoundException.class);
+
+		mockMvc.perform(get("/api/v1/customers/1")
+				.contentType(MediaType.APPLICATION_JSON_VALUE))
+				.andExpect(status().isNotFound());
 	}
 }
