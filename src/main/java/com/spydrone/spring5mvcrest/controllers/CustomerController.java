@@ -3,12 +3,15 @@ package com.spydrone.spring5mvcrest.controllers;
 import com.spydrone.spring5mvcrest.model.CustomerDTO;
 import com.spydrone.spring5mvcrest.model.CustomerListDTO;
 import com.spydrone.spring5mvcrest.services.CustomerService;
+import io.swagger.annotations.Api;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 
+@Api(description = "test")
 @RestController
 @RequestMapping("/api/v1/customers")
 public class CustomerController {
@@ -19,6 +22,7 @@ public class CustomerController {
 		this.customerService = customerService;
 	}
 
+	@ApiOperation(value = "list of customers", notes = "notes")
 	@GetMapping
 	public ResponseEntity<CustomerListDTO> getAll() {
 		return new ResponseEntity<>(new CustomerListDTO(customerService.getAll()), HttpStatus.OK);
